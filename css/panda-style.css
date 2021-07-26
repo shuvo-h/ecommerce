@@ -1,0 +1,41 @@
+/* body{
+    margin: 0px 100px;
+    background-color: rgb(149, 152, 153);
+} */
+
+.carousel{
+    background-color: lightgoldenrodyellow;
+    margin-top: 50px;
+    padding: 40px;
+    height: auto;
+    border-radius: 15px;
+}
+.carousel-img{
+    height: 25vw;
+}
+.product-catagory{
+    height: auto;
+    margin: 10px;
+    margin-top: 40px;
+}
+.pc-item{
+    border-radius: 15px;
+}
+.pc-title{
+    font-size: 40px;
+    
+}
+.pc-pic img{
+    height: 100px;
+}
+.shoe-photo{
+    height: auto;
+}
+
+.photo-card{
+    border-radius: 20px;
+}
+
+.input-group{
+    border: 1px solid;
+}
