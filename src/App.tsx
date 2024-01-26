@@ -1,10 +1,11 @@
-
+import MainLayout from "./components/layout/MainLayout";
+import "./index.css";
 
 function App() {
 
   return (
     <>
-      <h1>Home page vite</h1>
+      <MainLayout />
     </>
   )
 }
