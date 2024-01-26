@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Flex } from "antd";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { authApi } from "../redux/features/auth/authApi";
 import { TUser, setUser } from "../redux/features/auth/authSlice";
 import { verifyToken } from "../utilies/verifyToken";
@@ -78,6 +78,9 @@ const Login = () => {
 
         {/* <Button htmlType="submit">Login</Button> */}
         <ElectroButton loading={isLoading} disabled={isLoading} type="submit">Login</ElectroButton>
+        <div className="mt-4">
+            <p>Don't have an account? Register <NavLink className={'text-blue-400 underline'} to={'/register'}>here</NavLink></p>
+        </div>
       </ElectroForm>
     </Flex>
   );

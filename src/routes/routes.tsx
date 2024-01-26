@@ -4,12 +4,13 @@ import Login from "../pages/Login";
 import { dashboardRoutes } from "./dashboard.routes";
 import Registration from "../pages/Registration";
 import { routeGenerator } from "../utilies/routesGenerator";
+import ProtectedRoute from "../components/layout/ProtectedRoute";
 
 
 export const routes = createBrowserRouter([
     {
         path:"/dashboard",
-        element: <App />,
+        element: <ProtectedRoute><App /></ProtectedRoute>,
         children: routeGenerator(dashboardRoutes,)
     },
     {
