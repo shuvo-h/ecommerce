@@ -30,22 +30,22 @@ export interface TProduct  {
     createdAt: Date;
     updatedAt: Date;
 }
-
+export type TProductMeta =  {
+    limit: number, 
+    page: number, 
+    total: number
+}
 type TProductState = {
     products: TProduct[] | [];
-    meta: {
-        limit: number, 
-        page: number, 
-        total: number
-    }
+    meta: TProductMeta
 }
 
 const initialState: TProductState = {
     products: [],
     meta: {
-        limit: 10, 
+        limit: 5, 
         page: 1, 
-        total: 2
+        total: 0
     }
 }
 
@@ -58,13 +58,21 @@ const productSlice = createSlice({
         const products = action.payload;
         state.products = products;
       },
+      setProductPageNumber: (state, action) => {
+        state.meta.page = action.payload;
+      },
+      setProductLimitPerPage: (state, action) => {
+        state.meta.limit = action.payload;
+      },
+      
     },
   });
   
-  export const { setProducts,  } = productSlice.actions;
+  export const { setProducts,setProductLimitPerPage, setProductPageNumber } = productSlice.actions;
   export default productSlice.reducer;
   
   export const productGetters = {
     selectProductList: (state: RootState) => state.products.products,
+    selectProductMeta: (state: RootState) => state.products.meta,
   };
   

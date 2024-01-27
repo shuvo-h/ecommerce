@@ -5,9 +5,12 @@ export const productsApi = baseAPI.injectEndpoints({
         getProducts: builder.query({
             query: (searchQuery) =>{
                 console.log({searchQuery});
-                
+                let queryString:string = ''
+                if (searchQuery) {
+                    queryString = `?${new URLSearchParams(searchQuery).toString()}`
+                }
                 return {
-                    url: `/products/?page=1&search=computer&limit=10`,
+                    url: `/products/${queryString}`,
                     method: "GET",
                 }
             },

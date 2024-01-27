@@ -1,8 +1,9 @@
-import { Space, Table, Tooltip, Typography } from "antd";
+import { Space, Table, Typography } from "antd";
 import type { TableColumnsType } from "antd";
 import { useState } from "react";
-import { TProduct } from "../../../redux/features/products/productSlice";
+import { TProduct, TProductMeta, setProductLimitPerPage, setProductPageNumber } from "../../../redux/features/products/productSlice";
 import { parseDate } from "../../../utilies/dateTimeUtils";
+import { useAppDispatch } from "../../../redux/storeHook";
 
 interface TProductCol extends TProduct {
   key: React.Key;
@@ -129,22 +130,45 @@ const columns: TableColumnsType<TProductCol> = [
 
 type TProductsTableProps = {
   data: TProduct[];
+  meta: TProductMeta;
   isLoading: boolean;
 };
-const ProductsTable = ({ data,isLoading }: TProductsTableProps) => {
+const ProductsTable = ({ data,meta,isLoading }: TProductsTableProps) => {
+    const dispatch = useAppDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-  const formatTableData = (rawData: TProduct[]) => {
-    const newList = rawData.map((product) => {
-      return { ...product, key: product._id };
-    });
-    return newList;
-  };
-
+ 
+  // methods
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
+      console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+      setSelectedRowKeys(newSelectedRowKeys);
+    };
+
+    // computed
+    const formatTableData = (rawData: TProduct[]) => {
+        const newList = rawData.map((product) => {
+            return { ...product, key: product._id };
+        });
+        return newList;
+    };
+
+    const paginationConfig = {
+        pageSize: meta?.limit || 10, 
+        total: meta?.total || 0, 
+        showSizeChanger: true, 
+        showQuickJumper: true, 
+        showTotal: (total:number, range:number[]) => `${range[0]}-${range[1]} of ${total} items`, // Display total items
+        current: meta?.page || 1,
+        onChange: (page:number, pageSize:number) => {
+          console.log('Page:', page, 'Page Size:', pageSize);
+        //   productsApi.useGetProductsQuery({ page: page, limit: pageSize });
+            dispatch(setProductPageNumber(page))
+        },
+        onShowSizeChange: (current:number, size:number) => {
+            console.log('Current Page:', current, 'Page Size:', size);
+            dispatch(setProductLimitPerPage(size))
+         
+        },
+      };
 
   return (
     <div>
@@ -158,6 +182,7 @@ const ProductsTable = ({ data,isLoading }: TProductsTableProps) => {
           // columnWidth: 48,
         }}
         loading={isLoading}
+        pagination={paginationConfig}
       />
     </div>
   );
