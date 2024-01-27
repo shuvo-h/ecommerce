@@ -36,7 +36,7 @@ const Login = () => {
       const user = verifyToken(response.data.accessToken) as TUser;
       dispatch(setUser({ user, token: response.data.accessToken }));
       toast.success("Login successfull", { id: toastId, duration: 2000 });
-      navigate(`/dashboard`)
+      navigate(`/dashboard/gadgets`)
     } catch (error: any) {
       console.log(error.data);
       const message = Array.isArray(error.data?.errorSources) ? error.data.errorSources[0].message : error.data.message || "something went wrong" ;
@@ -46,6 +46,7 @@ const Login = () => {
       });
     }
   };
+  
   return (
     <Flex
       className="h-screen"

@@ -3,6 +3,7 @@ import storage from 'redux-persist/lib/storage';
 import counterSlice from "./features/counterSlice"
 import { baseAPI } from './api/baseAPI'
 import authSlice from "./features/auth/authSlice"
+import productSlice from "./features/products/productSlice"
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist';
 
 // persist from localStorage
@@ -18,6 +19,7 @@ export const store = configureStore({
     counter: counterSlice,
     // auth: authSlice,   // without persist
     auth: persistedAuthReducer, // with persist
+    products: productSlice,   // without persist
   },
   middleware: getDefaultMiddlewares => getDefaultMiddlewares({
     serializableCheck:{
