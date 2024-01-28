@@ -99,16 +99,17 @@ const Gadgets = () => {
         name="search"
         />
         <h2>Filter list</h2>
-        <button>Price range</button>
-        <button>release Date</button>
-        <button>Brand</button>
-        <button>Model Number</button>
-        <button>Categoty </button>
-        <button>Operating System</button>
-        <button>cONNECTIVITY</button>
-        <button>power source</button>
-        <button>Features</button>
-        <button>Dimension</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">Price range</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">release Date</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">Brand</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">Model Number</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">Categoty </button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">Operating System</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">cONNECTIVITY</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">power source</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">Features</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">Dimension</button>
+        <button className="border px-1 mx-1 bg-red-500 rounded-md">Bulk Delete</button>
 
       </ElectroForm>
         <ProductsTable 

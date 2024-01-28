@@ -4,6 +4,8 @@ import { useState } from "react";
 import { TProduct, TProductMeta, setProductLimitPerPage, setProductPageNumber } from "../../../redux/features/products/productSlice";
 import { parseDate } from "../../../utilies/dateTimeUtils";
 import { useAppDispatch } from "../../../redux/storeHook";
+import { productsApi } from "../../../redux/features/products/productsApi";
+import { toast } from "sonner";
 
 interface TProductCol extends TProduct {
   key: React.Key;
@@ -19,8 +21,31 @@ type TProductsTableProps = {
 const ProductsTable = ({ data,meta,isLoading,onClickDuplicateProduct,onClickEditProduct }: TProductsTableProps) => {
     const dispatch = useAppDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [deleteProductMutation,] = productsApi.useDeleteProductByIdMutation()
  
   // methods
+  const onDeleteClick = async(productId:string) =>{
+    const toastId = toast.loading('deleting a product');
+    try {
+      
+      const res = await deleteProductMutation(productId);
+      if ('data' in res) {
+        const data = res.data;
+        if (data.success) {
+            toast.success("Product deleted successfully", { id: toastId, duration: 2000 });
+        } else {
+            toast.error(data.message || "Failed to delete product", { id: toastId, duration: 2000 });
+        }
+    } else {
+        // Handle error response
+        toast.error('Failed to delete product', { id: toastId, duration: 2000 });
+    }
+    } catch (error) {
+      console.log(error);
+      
+      toast.error('Failed to delete product',{id:toastId,duration:2000})
+    }
+  }
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
       console.log("selectedRowKeys changed: ", newSelectedRowKeys);
       setSelectedRowKeys(newSelectedRowKeys);
@@ -156,13 +181,16 @@ const columns: TableColumnsType<TProductCol> = [
     width: 150,
     fixed: "right",
     render: (value) => {
+      console.log(value);
+      
+      
       return <Space className="flex flex-col">
         {/* <Typography.Link>Edit</Typography.Link> */}
         {/* <Typography.Link>Delete</Typography.Link> */}
         <button className="border px-1 rounded-md">Sell</button>
         <button className="border px-1 rounded-md" onClick={()=>{onClickDuplicateProduct(value);}}>Edit & Duplicate</button>
         <button className="border px-1 rounded-md" onClick={()=>{onClickEditProduct(value);}}>Edit</button>
-        <button className="border px-1 rounded-md">Delete</button>
+        <button className="border px-1 rounded-md"  onClick={()=>{onDeleteClick(value._id)}}>Delete</button>
       </Space>
     },
   },

@@ -18,6 +18,19 @@ type TProductEditInfo = {
 
 type TUpdateProductRes = TAddProductRes;
 
+interface DeleteProductRes {
+    success: boolean;
+    message: string;
+    data: null;
+    errorSources: ErrorSource[];
+}
+
+interface ErrorSource {
+    path: string;
+    message: string;
+}
+
+
 export const productsApi = baseAPI.injectEndpoints({
     endpoints: (builder) =>({
         // get product list
@@ -56,6 +69,16 @@ export const productsApi = baseAPI.injectEndpoints({
                     url:`/products/product/${productId}`,
                     method:"PATCH",
                     body: product
+                }
+            },
+            invalidatesTags: ['products'],
+        }),
+        // delete existing product by id
+        deleteProductById: builder.mutation<DeleteProductRes,string>({
+            query: (productId:string) =>{
+                return {
+                    url:`/products/product/${productId}`,
+                    method:"DELETE",
                 }
             },
             invalidatesTags: ['products'],
