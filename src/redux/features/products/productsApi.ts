@@ -58,7 +58,7 @@ export const productsApi = baseAPI.injectEndpoints({
                     body: bodyData
                 }
             },
-            invalidatesTags: ['products'],
+            invalidatesTags: ['products','products-options'],
         }),
 
         // Edit existing product
@@ -71,7 +71,7 @@ export const productsApi = baseAPI.injectEndpoints({
                     body: product
                 }
             },
-            invalidatesTags: ['products'],
+            invalidatesTags: ['products','products-options'],
         }),
         // delete existing product by id
         deleteProductById: builder.mutation<DeleteProductRes,string>({
@@ -82,6 +82,19 @@ export const productsApi = baseAPI.injectEndpoints({
                 }
             },
             invalidatesTags: ['products'],
+        }),
+
+
+        // get product filter options list
+        getProductFilterOptions: builder.query({
+            query: () =>{
+                
+                return {
+                    url: `/products/product/filter-options`,
+                    method: "GET",
+                }
+            },
+            providesTags:['products-options'],
         }),
         
     })

@@ -1,4 +1,4 @@
-import { Button, Modal } from "antd";
+import {  Modal } from "antd";
 import ElectroForm from "../../../components/form/ElectroForm";
 import { FieldValues } from "react-hook-form";
 import ElectroInput from "../../../components/form/ElectroInput";
@@ -13,10 +13,9 @@ type TAddProductModalProps = {
   openModal: boolean
   isEditedProduct: boolean;
   onCloseModal: ()=>void;
-  onOpenModal:  ()=>void;
 }
 
-const AddProductModal = ({defaultProduct,onOpenModal, openModal, onCloseModal, isEditedProduct}:TAddProductModalProps) => {
+const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProduct}:TAddProductModalProps) => {
   const [addProductMutation,{isLoading,error}] = productsApi.useAddProductMutation()
   const [editProductByIdMutation,{isLoading:isEditLoading,error:editError}] = productsApi.useEditProductByIdMutation()
   
@@ -196,13 +195,13 @@ const AddProductModal = ({defaultProduct,onOpenModal, openModal, onCloseModal, i
 
   return (
     <>
-      <Button
+      {/* <Button
         type="dashed"
         className="bg-blue-300 ml-auto block my-2 font-bold"
         onClick={onOpenModal}
       >
         Add Gadget
-      </Button>
+      </Button> */}
       <Modal
         title={isEditedProduct ? "Edit Electric Gadget": "Add an Electric Gadget"}
         open={openModal}
