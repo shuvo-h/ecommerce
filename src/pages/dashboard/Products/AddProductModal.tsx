@@ -19,7 +19,7 @@ type TAddProductModalProps = {
 const AddProductModal = ({defaultProduct,onOpenModal, openModal, onCloseModal, isEditedProduct}:TAddProductModalProps) => {
   const [addProductMutation,{isLoading,error}] = productsApi.useAddProductMutation()
   const [editProductByIdMutation,{isLoading:isEditLoading,error:editError}] = productsApi.useEditProductByIdMutation()
-  console.log({editError});
+  
   
 
   const handleOk = () => {
@@ -27,7 +27,6 @@ const AddProductModal = ({defaultProduct,onOpenModal, openModal, onCloseModal, i
   };
 
   const onAddProduct = async(data: FieldValues ) => {
-    console.log("addted Product button", data);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {slug,...restData} = data;
     
@@ -48,13 +47,11 @@ const AddProductModal = ({defaultProduct,onOpenModal, openModal, onCloseModal, i
 
       if (isEditedProduct) {
         // call edit API
-        console.log("calling edit API");
         const result = await editProductByIdMutation({productId: data._id, product:formattedData})
         if ('data' in result) {
           toast.success("Product Edited successfully",{id:toastId,duration:2000})
           onCloseModal();
         }else{
-          console.log(result);
           toast.error('Failed to update product',{id:toastId,duration:2000})
         }
         

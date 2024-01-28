@@ -15,7 +15,6 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loginMutation, {  isLoading,  }] =    authApi.useLoginMutation();
-//   console.log({ error, isLoading, data });
   // const {register,handleSubmit,} = useForm<TLoginInputs>()
 
   const defaultFormValue = {
@@ -38,7 +37,6 @@ const Login = () => {
       toast.success("Login successfull", { id: toastId, duration: 2000 });
       navigate(`/dashboard/gadgets`)
     } catch (error: any) {
-      console.log(error.data);
       const message = Array.isArray(error.data?.errorSources) ? error.data.errorSources[0].message : error.data.message || "something went wrong" ;
       toast.error(message, {
         id: toastId,

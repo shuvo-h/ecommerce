@@ -31,12 +31,12 @@ interface ErrorSource {
 }
 
 
+
 export const productsApi = baseAPI.injectEndpoints({
     endpoints: (builder) =>({
         // get product list
         getProducts: builder.query({
             query: (searchQuery) =>{
-                console.log({searchQuery});
                 let queryString:string = ''
                 if (searchQuery) {
                     queryString = `?${new URLSearchParams(searchQuery).toString()}`

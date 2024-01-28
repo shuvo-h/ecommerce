@@ -6,7 +6,7 @@ import {
 import { createElement } from "react";
 import About from "../pages/About";
 import Gadgets from "../pages/dashboard/Products/Gadgets";
-import SalesHistoryPage from "../pages/dashboard/SalesHistoryPage";
+import SalesHistoryPage from "../pages/dashboard/SaleOrders/SalesHistoryPage";
 
 export const dashboardRoutes = [
   {

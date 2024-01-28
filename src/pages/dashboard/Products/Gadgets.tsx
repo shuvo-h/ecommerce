@@ -10,6 +10,8 @@ import { useState } from "react";
 import { FieldValues,  } from "react-hook-form";
 import AddProductModal from "./AddProductModal";
 import { useDispatch } from "react-redux";
+import CreateSaleModal from "./CreateSaleModal";
+import { useSearchParams } from "react-router-dom";
 
 const defaultProductFormModalValue = {
   _id: "",
@@ -39,12 +41,13 @@ const defaultProductFormModalValue = {
 const Gadgets = () => {
   const dispatch = useDispatch();
     const meta = useAppSelector(productGetters.selectProductMeta)
+    const [searchParams, setSearchParams] = useSearchParams();
     const [search,setSearch] = useState('');
+    const [sellOrderModalStatus, setSellOrderModalStatus] = useState(false);
     const [openAddProductModal, setOpenAddProductModal] = useState(false);
     const [editedDuplicateProduct,setEditedDuplicateProduct] = useState<TProduct| undefined>(undefined);
     const [isEditedProduct,setIsEditedProduct] = useState<boolean>(false);
 
-    console.log({isEditedProduct});
     
   const {
     data: products,
@@ -58,8 +61,6 @@ const Gadgets = () => {
   }
 
   const onCloseModal = () =>{
-    console.log("Closing.....");
-    
     setOpenAddProductModal(false);
     setEditedDuplicateProduct(undefined);
     setIsEditedProduct(false);
@@ -82,6 +83,18 @@ const Gadgets = () => {
 
   }
 
+  // sales order methods
+  const onSaleOrderModalOpen = (productId:string) =>{
+    setSearchParams({productId})
+    setSellOrderModalStatus(true);
+  }
+  const onSaleOrderModalClose = () =>{
+    const params = new URLSearchParams(searchParams);
+    params.delete('productId');
+    setSearchParams(params.toString())
+    setSellOrderModalStatus(false);
+  }
+
   return (
     <div>
       Show all Gadgets Page
@@ -92,6 +105,10 @@ const Gadgets = () => {
         onCloseModal={onCloseModal} 
         openModal={openAddProductModal} 
         isEditedProduct={isEditedProduct} 
+      />
+      <CreateSaleModal 
+        modalStatus={sellOrderModalStatus} 
+        onModalClose={onSaleOrderModalClose} 
       />
       <ElectroForm className="border p-4 rounded-lg shadow-md" onSubmit={onSearch}  defaultValues={undefined}>
         <ElectroInput 
@@ -118,6 +135,7 @@ const Gadgets = () => {
          isLoading={isLoading} 
          onClickDuplicateProduct={onClickDuplicateProduct}
          onClickEditProduct={onClickEditProduct}
+         onClickSale={onSaleOrderModalOpen}
          />
       </div>
     </div>

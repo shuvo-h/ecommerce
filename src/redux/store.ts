@@ -4,6 +4,7 @@ import counterSlice from "./features/counterSlice"
 import { baseAPI } from './api/baseAPI'
 import authSlice from "./features/auth/authSlice"
 import productSlice from "./features/products/productSlice"
+import salesSlice from "./features/sales/salesSlice"
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist';
 
 // persist from localStorage
@@ -20,6 +21,7 @@ export const store = configureStore({
     // auth: authSlice,   // without persist
     auth: persistedAuthReducer, // with persist
     products: productSlice,   // without persist
+    sales: salesSlice,   // without persist
   },
   middleware: getDefaultMiddlewares => getDefaultMiddlewares({
     serializableCheck:{

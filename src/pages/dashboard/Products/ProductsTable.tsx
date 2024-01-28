@@ -17,8 +17,9 @@ type TProductsTableProps = {
   isLoading: boolean;
   onClickEditProduct: (product:TProduct)=>void;
   onClickDuplicateProduct: (product:TProduct)=>void;
+  onClickSale: (product:string)=>void;
 };
-const ProductsTable = ({ data,meta,isLoading,onClickDuplicateProduct,onClickEditProduct }: TProductsTableProps) => {
+const ProductsTable = ({ data,meta,isLoading,onClickSale,onClickDuplicateProduct,onClickEditProduct }: TProductsTableProps) => {
     const dispatch = useAppDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [deleteProductMutation,] = productsApi.useDeleteProductByIdMutation()
@@ -47,7 +48,6 @@ const ProductsTable = ({ data,meta,isLoading,onClickDuplicateProduct,onClickEdit
     }
   }
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-      console.log("selectedRowKeys changed: ", newSelectedRowKeys);
       setSelectedRowKeys(newSelectedRowKeys);
     };
 
@@ -181,13 +181,10 @@ const columns: TableColumnsType<TProductCol> = [
     width: 150,
     fixed: "right",
     render: (value) => {
-      console.log(value);
-      
-      
       return <Space className="flex flex-col">
         {/* <Typography.Link>Edit</Typography.Link> */}
         {/* <Typography.Link>Delete</Typography.Link> */}
-        <button className="border px-1 rounded-md">Sell</button>
+        <button className="border px-1 rounded-md" onClick={()=>{onClickSale(value._id)}}>Sell</button>
         <button className="border px-1 rounded-md" onClick={()=>{onClickDuplicateProduct(value);}}>Edit & Duplicate</button>
         <button className="border px-1 rounded-md" onClick={()=>{onClickEditProduct(value);}}>Edit</button>
         <button className="border px-1 rounded-md"  onClick={()=>{onDeleteClick(value._id)}}>Delete</button>
@@ -204,13 +201,13 @@ const columns: TableColumnsType<TProductCol> = [
         showQuickJumper: true, 
         showTotal: (total:number, range:number[]) => `${range[0]}-${range[1]} of ${total} items`, // Display total items
         current: meta?.page || 1,
-        onChange: (page:number, pageSize:number) => {
-          console.log('Page:', page, 'Page Size:', pageSize);
+        
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        onChange: (page:number, _pageSize:number) => {
         //   productsApi.useGetProductsQuery({ page: page, limit: pageSize });
             dispatch(setProductPageNumber(page))
         },
-        onShowSizeChange: (current:number, size:number) => {
-            console.log('Current Page:', current, 'Page Size:', size);
+        onShowSizeChange: (_current:number, size:number) => {
             dispatch(setProductPageNumber(1))
             dispatch(setProductLimitPerPage(size))
          
