@@ -27,9 +27,10 @@ const ElectroInput = ({
   value,
   defaultValue = undefined,
   placeHolder = undefined,
+
 }: TElectroInputProps) => {
   return (
-    <div style={{ marginBottom: "20px" }} className={className}>
+    <div className={`mb-5 ${className}`}>
       {label && (
         <label className={`font-semibold ${classNameLabel}`} htmlFor={id}>
           {label}{" "}
@@ -49,6 +50,7 @@ const ElectroInput = ({
               id={id}
               defaultValue={defaultValue}
               placeholder={placeHolder}
+              
             />
           )}
         />

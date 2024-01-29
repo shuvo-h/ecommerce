@@ -1,6 +1,5 @@
 import { Space, Table } from "antd";
 import type { TableColumnsType } from "antd";
-import { useState } from "react";
 import {
   TProduct,
   TProductMeta,
@@ -11,6 +10,7 @@ import { parseDate } from "../../../utilies/dateTimeUtils";
 import { useAppDispatch } from "../../../redux/storeHook";
 import { productsApi } from "../../../redux/features/products/productsApi";
 import { toast } from "sonner";
+import { CopyOutlined, DeleteFilled, DeleteOutlined, EditOutlined, ShoppingCartOutlined, ShoppingFilled, ShoppingTwoTone } from "@ant-design/icons";
 
 interface TProductCol extends TProduct {
   key: React.Key;
@@ -23,6 +23,8 @@ type TProductsTableProps = {
   onClickEditProduct: (product: TProduct) => void;
   onClickDuplicateProduct: (product: TProduct) => void;
   onClickSale: (product: string) => void;
+  selectedRowKeys:React.Key[];
+  setSelectedRowKeys:React.Dispatch<React.SetStateAction<React.Key[]>>
 };
 const ProductsTable = ({
   data,
@@ -31,10 +33,13 @@ const ProductsTable = ({
   onClickSale,
   onClickDuplicateProduct,
   onClickEditProduct,
+  selectedRowKeys,
+  setSelectedRowKeys,
 }: TProductsTableProps) => {
   const dispatch = useAppDispatch();
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  
   const [deleteProductMutation] = productsApi.useDeleteProductByIdMutation();
+console.log(selectedRowKeys);
 
   // methods
   const onDeleteClick = async (productId: string) => {
@@ -85,13 +90,13 @@ const ProductsTable = ({
       dataIndex: "name",
       key: "name",
       render: (text) => <a>{text}</a>,
-      width: 150,
+      width: 200,
+      fixed: "left"
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      width: 80,
     },
     {
       title: "Quantity",
@@ -104,49 +109,49 @@ const ProductsTable = ({
       dataIndex: "releaseDate",
       key: "releaseDate",
       render: (value) => <span>{parseDate(value)}</span>,
-      responsive: ["xl"],
+      // responsive: ["xl"],
     },
     {
       title: "Brand",
       dataIndex: "brand",
       key: "brand",
       render: (value) => <span>{value}</span>,
-      responsive: ["md"],
+      // responsive: ["md"],
     },
     {
       title: "Model",
       dataIndex: "model",
       key: "model",
       render: (value) => <span>{value}</span>,
-      responsive: ["xl"],
+      // responsive: ["xl"],
     },
     {
       title: "category",
       dataIndex: "category",
       key: "category",
       render: (value) => <span>{value}</span>,
-      responsive: ["xl"],
+      // responsive: ["xl"],
     },
     {
       title: "Operating System",
       dataIndex: "operatingSystem",
       key: "operatingSystem",
       render: (value) => <span>{value}</span>,
-      responsive: ["xl"],
+      // responsive: ["xl"],
     },
     {
       title: "Connectivity",
       dataIndex: "connectivity",
       key: "connectivity",
       render: (value) => <span>{value}</span>,
-      responsive: ["xxl"],
+      // responsive: ["xxl"],
     },
     {
       title: "Power Source",
       dataIndex: "powerSource",
       key: "powerSource",
       render: (value) => <span>{value}</span>,
-      responsive: ["xxl"],
+      // responsive: ["xxl"],
     },
     {
       title: "Features",
@@ -170,7 +175,7 @@ const ProductsTable = ({
           </span>
         );
       },
-      responsive: ["xxl"],
+      // responsive: ["xxl"],
     },
     {
       title: "Dimension",
@@ -193,7 +198,7 @@ const ProductsTable = ({
           </span>
         );
       },
-      responsive: ["xxl"],
+      // responsive: ["xxl"],
     },
     {
       title: "Weight",
@@ -202,48 +207,55 @@ const ProductsTable = ({
       render: (value) => {
         return <span>{value}</span>;
       },
-      responsive: ["xxl"],
+      // responsive: ["xxl"],
     },
     {
       title: "Action",
       width: 150,
-      fixed: "right",
+      // fixed: "right",
+      align:"center",
       render: (value) => {
         return (
           <Space className="flex flex-col">
-            {/* <Typography.Link>Edit</Typography.Link> */}
-            {/* <Typography.Link>Delete</Typography.Link> */}
             <button
-              className="border px-1 rounded-md"
+              className="border px-1 rounded-md hover:border-blue-400 hover:scale-125 transition easy-in-out"
               onClick={() => {
                 onClickSale(value._id);
               }}
             >
-              Sell
+              <ShoppingTwoTone />
             </button>
+            
+            <div>
+              <button
+                className="border px-1 rounded-md mr-1 hover:border-blue-400 hover:scale-125 transition easy-in-out"
+                onClick={() => {
+                  onClickEditProduct(value);
+                }}
+              >
+                <EditOutlined />
+              </button>
+              <button
+                className="border px-1 rounded-md hover:border-red-400 hover:scale-125 transition easy-in-out"
+                onClick={() => {
+                  onDeleteClick(value._id);
+                }}
+              >
+                {/* <DeleteOutlined  className="text-red-500" /> */}
+                <DeleteFilled className="text-red-500" />
+              </button>
+            </div>
+
             <button
-              className="border px-1 rounded-md"
+              className="border px-1 rounded-md hover:border-blue-400 hover:scale-110 transition easy-in-out"
               onClick={() => {
                 onClickDuplicateProduct(value);
               }}
             >
-              Edit & Duplicate
-            </button>
-            <button
-              className="border px-1 rounded-md"
-              onClick={() => {
-                onClickEditProduct(value);
-              }}
-            >
-              Edit
-            </button>
-            <button
-              className="border px-1 rounded-md"
-              onClick={() => {
-                onDeleteClick(value._id);
-              }}
-            >
-              Delete
+              <span>
+                <CopyOutlined /> &amp; <EditOutlined  /> 
+
+              </span>
             </button>
           </Space>
         );
@@ -272,7 +284,7 @@ const ProductsTable = ({
   };
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       <Table
         columns={columns}
         dataSource={formatTableData(data)}
@@ -284,6 +296,8 @@ const ProductsTable = ({
         }}
         loading={isLoading}
         pagination={paginationConfig}
+        // scroll={{ x: 'calc(1700px + 50%)',  }}
+        scroll={{ x: 'auto',  }}
       />
     </div>
   );

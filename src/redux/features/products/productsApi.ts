@@ -83,6 +83,17 @@ export const productsApi = baseAPI.injectEndpoints({
             },
             invalidatesTags: ['products'],
         }),
+        // delete existing product list by ids
+        deleteProductsByIds: builder.mutation<DeleteProductRes,string[]>({
+            query: (productIds:string[]) =>{
+                return {
+                    url:`/products`,
+                    method:"DELETE",
+                    body: {productIds}
+                }
+            },
+            invalidatesTags: ['products'],
+        }),
 
 
         // get product filter options list

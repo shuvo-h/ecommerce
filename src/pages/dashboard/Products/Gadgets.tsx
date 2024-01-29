@@ -17,6 +17,8 @@ import { useSearchParams } from "react-router-dom";
 import FilterItems from "./FilterItems";
 import { Button } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
+import { toast } from "sonner";
+import { errorFormatToString } from "../../../utilies/errorFormatter";
 
 const defaultProductFormModalValue = {
   _id: "",
@@ -42,9 +44,20 @@ const defaultProductFormModalValue = {
   weight: "",
 };
 
+const purifyObject = (object:Record<string,unknown>) =>{
+  const newObj:Record<string,unknown> = {};
+  for ( const key in object){
+    if (object[key]) {
+      newObj[key] = object[key];
+    }
+  }
+  return newObj;
+}
+
 const Gadgets = () => {
   const dispatch = useDispatch();
   const meta = useAppSelector(productGetters.selectProductMeta);
+  const query = useAppSelector(productGetters.selectProductQuery);
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
   const [sellOrderModalStatus, setSellOrderModalStatus] = useState(false);
@@ -54,11 +67,18 @@ const Gadgets = () => {
   >(undefined);
   const [isEditedProduct, setIsEditedProduct] = useState<boolean>(false);
 
+  const [deleteSelectedProductsMutation,{isLoading:isBulkDeleteLoading,}] = productsApi.useDeleteProductsByIdsMutation()
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+console.log(selectedRowKeys);
+
   const { data: products, isLoading } = productsApi.useGetProductsQuery({
     page: meta.page,
     limit: meta.limit,
     search,
+    ...purifyObject({...query}),
   });
+
+  
 
   const onSearch = (data: FieldValues) => {
     // set search page to 1 always
@@ -97,17 +117,46 @@ const Gadgets = () => {
     setSellOrderModalStatus(false);
   };
 
+  const bulkProductDeletehandler = async() =>{
+    const toastId = toast.loading('Deleting the selected products');
+    if (!selectedRowKeys.length) {
+      toast.error('Please select the products first',{id:toastId,duration:2000})
+      return
+    }
+    try {
+      const result = await deleteSelectedProductsMutation(selectedRowKeys as string[])
+      console.log({result});
+      
+      if ('data' in result) {
+        if (result.data?.success) {
+          setSelectedRowKeys([]);
+          toast.success( result.data?.message || "Products are deleted successfully!",{id:toastId,duration:2000});
+        }else{
+          toast.error(result.data?.message ||'Failed to update product',{id:toastId,duration:2000})
+        }
+        // onModalClose();
+      }else{
+        toast.error('Failed to update product',{id:toastId,duration:2000})
+      }
+
+    } catch (err) {
+      console.log(err);
+      toast.error(errorFormatToString(err),{id:toastId,duration:2000})
+    }
+  }
+
   return (
     <div>
       Show all Gadgets Page
       <div>
         <div className="flex items-center justify-end gap-4">
           <Button
-            className="flex items-center"
+            className={`flex items-center ${selectedRowKeys.length ? null : 'hidden'}`}
             type="primary"
             danger
-            disabled={false}
-            loading={true}
+            disabled={isBulkDeleteLoading}
+            loading={isBulkDeleteLoading}
+            onClick={bulkProductDeletehandler}
           >
             <DeleteOutlined /> Bulk Delete
           </Button>
@@ -117,6 +166,13 @@ const Gadgets = () => {
             onClick={onOpenModal}
           >
             Add Gadget
+          </Button>
+          <Button
+            type="dashed"
+            className="bg-red-300  block my-2 font-bold"
+            onClick={()=>{}}
+          >
+            Advance Filter
           </Button>
         </div>
         <AddProductModal
@@ -138,6 +194,8 @@ const Gadgets = () => {
           onClickDuplicateProduct={onClickDuplicateProduct}
           onClickEditProduct={onClickEditProduct}
           onClickSale={onSaleOrderModalOpen}
+          setSelectedRowKeys={setSelectedRowKeys}
+          selectedRowKeys={selectedRowKeys}
         />
       </div>
     </div>

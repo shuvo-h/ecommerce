@@ -4,16 +4,20 @@ import ElectroInput from "../../../components/form/ElectroInput";
 import {  DatePicker, DatePickerProps, Slider } from "antd";
 import { productsApi } from "../../../redux/features/products/productsApi";
 import ElectroSelect from "../../../components/form/ElectroSelect";
+import { useDispatch } from "react-redux";
+import debounce from "lodash/debounce"
+import { setPriceQuery, setQuery } from "../../../redux/features/products/productSlice";
 type FilterItems = {
   onSearch: (data: FieldValues) => void;
 };
 
 const FilterItems = ({ onSearch }: FilterItems) => {
+  const dispatch = useDispatch();
   const { data: options, isLoading } =
     productsApi.useGetProductFilterOptionsQuery(undefined);
-  console.log(options);
 
-  const optionFormatter = (options: string[]) => {
+  const optionFormatter = (optionsData: string[]) => {
+    const options = ['All',...optionsData]
     try {
       const filteredList = options.filter((str) => str.trim() !== "");
       const list = filteredList.map((el: string) => ({ value: el, label: el }));
@@ -27,39 +31,52 @@ const FilterItems = ({ onSearch }: FilterItems) => {
       return { list: [], defaultValue: "" };
     }
   };
+
+  const onPriceRangeChange = debounce((value: number[]) => {
+    // dispatch(setQuery({key:"minPrice"}))
+    const [minPrice,maxPrice] = value;
+    dispatch(setPriceQuery({minPrice,maxPrice}))
+  },1000);
+  
   const onReleaseDateChange: DatePickerProps["onChange"] = (
     _date,
     dateString
-  ) => {
-    console.log(dateString);
-  };
-
-  const onBrandChange = (value: string) => {
-    console.log(value);
-  };
-  const onModelChange = (value: string) => {
-    console.log(value);
-  };
-  const onCategoryChange = (value: string) => {
-    console.log(value);
-  };
-  const onOSChange = (value: string) => {
-    console.log(value);
-  };
-  const onConnectivityChange = (value: string) => {
-    console.log(value);
-  };
-  const onPowerSourceChange = (value: string) => {
-    console.log(value);
-  };
-  const onCameraResulationChange = (value: string) => {
-    console.log(value);
-  };
-  const onStorageCapacityChange = (value: string) => {
-    console.log(value);
-  };
-  const onScreenSizeChange = (value: string) => {
-    console.log(value);
+    ) => {
+      dispatch(setQuery({key:"releaseDate",value:dateString}))
+    };
+    
+    const onBrandChange = (value: string) => {
+      dispatch(setQuery({key:"brand",value}))
+    };
+    const onModelChange = (value: string) => {
+      dispatch(setQuery({key:"model",value}))
+    };
+    const onCategoryChange = (value: string) => {
+      dispatch(setQuery({key:"category",value}))
+    };
+    const onOSChange = (value: string) => {
+      console.log(value);
+      dispatch(setQuery({key:"operatingSystem",value}))
+    };
+    const onConnectivityChange = (value: string) => {
+      console.log(value);
+      dispatch(setQuery({key:"connectivity",value}))
+    };
+    const onPowerSourceChange = (value: string) => {
+      console.log(value);
+      dispatch(setQuery({key:"powerSource",value}))
+    };
+    const onCameraResulationChange = (value: string) => {
+      console.log(value);
+      dispatch(setQuery({key:"cameraResolution",value}))
+    };
+    const onStorageCapacityChange = (value: string) => {
+      console.log(value);
+      dispatch(setQuery({key:"storageCapacity",value}))
+    };
+    const onScreenSizeChange = (value: string) => {
+      console.log(value);
+      dispatch(setQuery({key:"screenSize",value}))
   };
 
   return (
@@ -69,28 +86,37 @@ const FilterItems = ({ onSearch }: FilterItems) => {
         onSubmit={onSearch}
         defaultValues={undefined}
       >
-        <div className="grid grid-cols-4 gap-2">
-          <ElectroInput type="search" name="search" label="Search product" placeHolder="Search by name, model, etc." />
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8">
+          <ElectroInput 
+            className="mb-4"
+            type="search" 
+            name="search" 
+            label="Search product" 
+            placeHolder="Search by name, model, etc." 
+            
+          />
           <div>
-            <label>
+            <label className="font-semibold">
               Price Range
-              <Slider range defaultValue={[20, 50]} disabled={false} />
+              <Slider onChange={onPriceRangeChange} range defaultValue={[10, 5000]} marks={{'0':0,'50000':50000}} min={0} max={50000} disabled={false} />
             </label>
           </div>
 
           <div>
-            <label>
+            <label className="font-semibold">
               Release Date
               <DatePicker
+                className="block mb-4"
                 onChange={onReleaseDateChange}
                 defaultValue={undefined}
               />
             </label>
           </div>
           <div>
-            <label>
+            <label  className="font-semibold">
               Brand:
               <ElectroSelect
+              className="block mb-4"
                 onChange={onBrandChange}
                 options={optionFormatter(options?.data?.brand || []).list}
                 defaultValue={
@@ -104,9 +130,10 @@ const FilterItems = ({ onSearch }: FilterItems) => {
           </div>
 
           <div>
-            <label>
+            <label className="font-semibold">
               Model:
               <ElectroSelect
+              className="block mb-4"
                 onChange={onModelChange}
                 options={optionFormatter(options?.data?.modelNumber || []).list}
                 defaultValue={
@@ -120,9 +147,10 @@ const FilterItems = ({ onSearch }: FilterItems) => {
           </div>
 
           <div>
-            <label>
+            <label className="font-semibold">
               Category:
               <ElectroSelect
+              className="block mb-4"
                 onChange={onCategoryChange}
                 options={optionFormatter(options?.data?.category || []).list}
                 defaultValue={
@@ -136,9 +164,10 @@ const FilterItems = ({ onSearch }: FilterItems) => {
           </div>
 
           <div>
-            <label>
+            <label className="font-semibold">
               Operating System:
               <ElectroSelect
+              className="block mb-4"
                 onChange={onOSChange}
                 options={
                   optionFormatter(options?.data?.operatingSystem || []).list
@@ -154,9 +183,10 @@ const FilterItems = ({ onSearch }: FilterItems) => {
           </div>
 
           <div>
-            <label>
+            <label className="font-semibold">
               Connectivity:
               <ElectroSelect
+              className="block mb-4"
                 onChange={onConnectivityChange}
                 options={
                   optionFormatter(options?.data?.connectivity || []).list
@@ -172,9 +202,10 @@ const FilterItems = ({ onSearch }: FilterItems) => {
           </div>
 
           <div>
-            <label>
+            <label className="font-semibold">
               Power Source:
               <ElectroSelect
+              className="block mb-4"
                 onChange={onPowerSourceChange}
                 options={optionFormatter(options?.data?.powerSource || []).list}
                 defaultValue={
@@ -188,9 +219,10 @@ const FilterItems = ({ onSearch }: FilterItems) => {
           </div>
 
           <div>
-            <label>
+            <label className="font-semibold">
               Camera Resulation:
               <ElectroSelect
+              className="block mb-4"
                 onChange={onCameraResulationChange}
                 options={
                   optionFormatter(
@@ -208,9 +240,10 @@ const FilterItems = ({ onSearch }: FilterItems) => {
             </label>
           </div>
           <div>
-            <label>
-              Camera Resulation:
+            <label className="font-semibold">
+              Storage Capacity:
               <ElectroSelect
+              className="block mb-4"
                 onChange={onStorageCapacityChange}
                 options={
                   optionFormatter(
@@ -228,9 +261,10 @@ const FilterItems = ({ onSearch }: FilterItems) => {
             </label>
           </div>
           <div>
-            <label>
-              Camera Resulation:
+            <label className="font-semibold">
+              Screen Size:
               <ElectroSelect
+              className="block mb-4"
                 onChange={onScreenSizeChange}
                 options={
                   optionFormatter(options?.data?.features?.screenSize || [])
@@ -245,8 +279,8 @@ const FilterItems = ({ onSearch }: FilterItems) => {
               />
             </label>
           </div>
-
-          
+          {/* invisiable submit button to submit the form for search field */}
+          <button type="submit"></button>
         </div>
       </ElectroForm>
     </div>

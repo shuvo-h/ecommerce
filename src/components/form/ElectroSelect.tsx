@@ -8,11 +8,10 @@ type TElectroSelectProps = {
     defaultValue:string | undefined;
     placeholder:string;
     isLoading?:boolean;
-
+    className?: string;
 }
 
-const ElectroSelect = ({onChange,onSearch,options,defaultValue,isLoading,placeholder}:TElectroSelectProps) => {
-    console.log(options,defaultValue);
+const ElectroSelect = ({onChange,onSearch,options,defaultValue,isLoading,placeholder,className}:TElectroSelectProps) => {
     
     return (
         <Select
@@ -24,7 +23,7 @@ const ElectroSelect = ({onChange,onSearch,options,defaultValue,isLoading,placeho
             filterOption={true}
             options={options}
             defaultValue={defaultValue}
-            className='min-w-36'
+            className={`min-w-36 ${className}`}
             loading={isLoading}
         />
     );

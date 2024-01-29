@@ -1,6 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
+type TQuary = {
+  minPrice?: number;
+  maxPrice?: number;
+  releaseDate?: string;
+  brand?: string;
+  model?: string;
+  category?: string;
+  connectivity?: string;
+  powerSource?: string;
+  cameraResolution?: string;
+  storageCapacity?: string;
+  screenSize?: string;
+  operatingSystem?: string;
+}
+
 export interface TProduct  {
     _id: string;
     user_id: string;
@@ -37,7 +52,8 @@ export type TProductMeta =  {
 }
 type TProductState = {
     products: TProduct[] | [];
-    meta: TProductMeta
+    meta: TProductMeta;
+    query: TQuary;
 }
 
 const initialState: TProductState = {
@@ -46,7 +62,21 @@ const initialState: TProductState = {
         limit: 5, 
         page: 1, 
         total: 0
-    }
+    },
+    query:{
+      minPrice: undefined,
+      maxPrice: undefined,
+      releaseDate: undefined,
+      brand: undefined,
+      model: undefined,
+      category: undefined,
+      connectivity: undefined,
+      powerSource: undefined,
+      cameraResolution: undefined,
+      storageCapacity: undefined,
+      screenSize: undefined,
+      operatingSystem: undefined
+    },
 }
 
 
@@ -64,15 +94,24 @@ const productSlice = createSlice({
       setProductLimitPerPage: (state, action) => {
         state.meta.limit = action.payload;
       },
-      
+      setQuery: (state,action) =>{
+        const {key,value} = action.payload;
+        const filteredValue = value === 'All' ? undefined : value;
+        state.query = {...state.query,[key]:filteredValue};
+      },
+      setPriceQuery: (state,action) =>{
+        const {minPrice,maxPrice} = action.payload;
+        state.query = {...state.query,minPrice,maxPrice};
+      },
     },
   });
   
-  export const { setProducts,setProductLimitPerPage, setProductPageNumber } = productSlice.actions;
+  export const { setProducts,setProductLimitPerPage, setProductPageNumber,setQuery,setPriceQuery } = productSlice.actions;
   export default productSlice.reducer;
   
   export const productGetters = {
     selectProductList: (state: RootState) => state.products.products,
     selectProductMeta: (state: RootState) => state.products.meta,
+    selectProductQuery: (state: RootState) => state.products.query,
   };
   
