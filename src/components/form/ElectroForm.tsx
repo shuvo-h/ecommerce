@@ -41,9 +41,24 @@ const ElectroForm = ({
     }
   }, [defaultValues, methods]);
 
+  const handleSubmitFn = async (data: FieldValues) => {
+    // Call your onSubmit API handler
+    try {
+      const isClear =  await onSubmit(data);
+      // Reset the form if the API call is successful
+      console.log({isClear});
+      if (isClear) {
+        methods.reset(defaultValues || {});
+      }
+    } catch (error) {
+      // Handle error if necessary
+      console.error("Error submitting form:", error);
+    }
+  };
+
   return (
     <FormProvider {...methods}>
-      <form className={className} onSubmit={methods.handleSubmit(onSubmit)}>
+      <form className={className} onSubmit={methods.handleSubmit(handleSubmitFn)}>
         {children}
       </form>
     </FormProvider>

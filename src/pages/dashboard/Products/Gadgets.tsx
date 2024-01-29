@@ -186,7 +186,7 @@ const Gadgets = () => {
           modalStatus={sellOrderModalStatus}
           onModalClose={onSaleOrderModalClose}
         />
-        <div className={`${isFilterExpand ? 'max-h-[1400px]': 'max-h-0'} transition-all duration-200 easy-in-out`}>
+        <div className={`${isFilterExpand ? 'max-h-[1400px]': 'max-h-0'} transition-all duration-200 easy-in-out overflow-hidden`}>
           <FilterItems onSearch={onSearch} />
         </div>
         <ProductsTable

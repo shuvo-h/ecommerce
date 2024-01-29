@@ -40,12 +40,14 @@ const CreateSaleModal = ({modalStatus,onModalClose}:TCreateSaleModalProps) => {
       
       if ('data' in result) {
         if(result.data.success){
-          toast.success("Product Edited successfully",{id:toastId,duration:2000})
+          toast.success("Product Sold successfully",{id:toastId,duration:2000})
+
           onModalClose();
+          return true; // clear the data from react hook form
         }
         
       }else{
-        toast.error('Failed to update product',{id:toastId,duration:2000})
+        toast.error('Failed to Sell product',{id:toastId,duration:2000})
       }
 
     } catch (err) {
