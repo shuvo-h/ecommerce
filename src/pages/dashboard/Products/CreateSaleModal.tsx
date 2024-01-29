@@ -30,14 +30,20 @@ const CreateSaleModal = ({modalStatus,onModalClose}:TCreateSaleModalProps) => {
     try {
       const bodyData = {
         product:productId,
-        soldDate: new Date().toISOString(),
         quantity: parseInt(data.quantity),
         ...data,
+        soldDate: new Date(data.soldDate).toISOString(),
       }
+      
       const result = await sellProductByIdMutation(bodyData as TProductSellBodyInfo)
+      console.log(result);
+      
       if ('data' in result) {
-        toast.success("Product Edited successfully",{id:toastId,duration:2000})
-        onModalClose();
+        if(result.data.success){
+          toast.success("Product Edited successfully",{id:toastId,duration:2000})
+          onModalClose();
+        }
+        
       }else{
         toast.error('Failed to update product',{id:toastId,duration:2000})
       }
@@ -51,10 +57,6 @@ const CreateSaleModal = ({modalStatus,onModalClose}:TCreateSaleModalProps) => {
     
   };
 
-  const defaultFields = {
-    buyerName: "",
-    quantity:0
-  }
 
 
   const fields = [
@@ -71,6 +73,13 @@ const CreateSaleModal = ({modalStatus,onModalClose}:TCreateSaleModalProps) => {
         errKey:"quantity",
         type:"number",
         placeholder:"eg. 9",
+      },
+    {
+        label:"Sold Date",
+        name:"soldDate",
+        errKey:"soldDate",
+        type:"date",
+        placeholder:"eg. 12/02/2024",
       },
   ];
   return (
@@ -89,10 +98,12 @@ const CreateSaleModal = ({modalStatus,onModalClose}:TCreateSaleModalProps) => {
         style={{maxWidth:"700px"}}
       >
         <ElectroForm
-          className="grid md:grid-cols-2 gap-2 border p-4 rounded-lg shadow-md"
+          className="border p-4 rounded-lg shadow-md"
           onSubmit={onSaleProductHandler}
-          defaultValues={defaultFields}
+          defaultValues={undefined}
         >
+          <div className='grid md:grid-cols-2 gap-2 '>
+
             {
                 fields.map((field, idx) =>{
                     
@@ -107,8 +118,9 @@ const CreateSaleModal = ({modalStatus,onModalClose}:TCreateSaleModalProps) => {
                   />
                 })
             }
-          <ElectroButton loading={isLoading} disabled={isLoading} type="submit">Sell Product</ElectroButton>
-          <span className="text-red-500">{errorFormatToObj(error)[""] ? errorFormatToObj(error)[""] || "Failed to create order": null}</span>
+          </div>
+          <ElectroButton className='block m-auto' loading={isLoading} disabled={isLoading} type="submit">Sell Product</ElectroButton>
+          <span className="block m-auto text-center text-red-500">{errorFormatToObj(error)[""] ? errorFormatToObj(error)[""] || "Failed to create order": null}</span>
         </ElectroForm>
       </Modal>
     </>

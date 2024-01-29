@@ -6,14 +6,15 @@ type TElectroButtonProps = {
     loading?:boolean,
     disabled?: boolean,
     type?: "button" | "submit" | "reset" | undefined,
+    className?: string;
 }
 
 
 
-const ElectroButton = ({children, loading=false,disabled=false, type='button'}:TElectroButtonProps) => {
+const ElectroButton = ({children, loading=false,disabled=false,className, type='button'}:TElectroButtonProps) => {
     return (
         <div>
-            <Button loading={loading} disabled={disabled} htmlType={type}>{children}</Button>
+            <Button className={className} loading={loading} disabled={disabled} htmlType={type}>{children}</Button>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { Space, Table } from "antd";
+import { Space, Table, Tooltip } from "antd";
 import type { TableColumnsType } from "antd";
 import {
   TProduct,
@@ -10,7 +10,7 @@ import { parseDate } from "../../../utilies/dateTimeUtils";
 import { useAppDispatch } from "../../../redux/storeHook";
 import { productsApi } from "../../../redux/features/products/productsApi";
 import { toast } from "sonner";
-import { CopyOutlined, DeleteFilled, DeleteOutlined, EditOutlined, ShoppingCartOutlined, ShoppingFilled, ShoppingTwoTone } from "@ant-design/icons";
+import { CopyOutlined, DeleteFilled, EditOutlined, ShoppingTwoTone } from "@ant-design/icons";
 
 interface TProductCol extends TProduct {
   key: React.Key;
@@ -39,7 +39,6 @@ const ProductsTable = ({
   const dispatch = useAppDispatch();
   
   const [deleteProductMutation] = productsApi.useDeleteProductByIdMutation();
-console.log(selectedRowKeys);
 
   // methods
   const onDeleteClick = async (productId: string) => {
@@ -217,16 +216,20 @@ console.log(selectedRowKeys);
       render: (value) => {
         return (
           <Space className="flex flex-col">
-            <button
-              className="border px-1 rounded-md hover:border-blue-400 hover:scale-125 transition easy-in-out"
-              onClick={() => {
-                onClickSale(value._id);
-              }}
-            >
-              <ShoppingTwoTone />
-            </button>
+            <Tooltip title="Sell Now">
+              <button
+                className="border px-1 rounded-md hover:border-blue-400 hover:scale-125 transition easy-in-out"
+                onClick={() => {
+                  onClickSale(value._id);
+                }}
+              >
+                <ShoppingTwoTone />
+              </button>
+
+            </Tooltip>
             
             <div>
+            <Tooltip title="Edit">
               <button
                 className="border px-1 rounded-md mr-1 hover:border-blue-400 hover:scale-125 transition easy-in-out"
                 onClick={() => {
@@ -235,28 +238,31 @@ console.log(selectedRowKeys);
               >
                 <EditOutlined />
               </button>
+            </Tooltip>
+            <Tooltip title="Delete">
               <button
                 className="border px-1 rounded-md hover:border-red-400 hover:scale-125 transition easy-in-out"
                 onClick={() => {
                   onDeleteClick(value._id);
                 }}
               >
-                {/* <DeleteOutlined  className="text-red-500" /> */}
                 <DeleteFilled className="text-red-500" />
               </button>
+            </Tooltip>
             </div>
+            <Tooltip title="Duplicate & Edit">
+              <button
+                className="border px-1 rounded-md hover:border-blue-400 hover:scale-110 transition easy-in-out"
+                onClick={() => {
+                  onClickDuplicateProduct(value);
+                }}
+              >
+                <span>
+                  <CopyOutlined /> &amp; <EditOutlined  /> 
 
-            <button
-              className="border px-1 rounded-md hover:border-blue-400 hover:scale-110 transition easy-in-out"
-              onClick={() => {
-                onClickDuplicateProduct(value);
-              }}
-            >
-              <span>
-                <CopyOutlined /> &amp; <EditOutlined  /> 
-
-              </span>
-            </button>
+                </span>
+              </button>
+            </Tooltip>
           </Space>
         );
       },

@@ -69,7 +69,7 @@ const Gadgets = () => {
 
   const [deleteSelectedProductsMutation,{isLoading:isBulkDeleteLoading,}] = productsApi.useDeleteProductsByIdsMutation()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-console.log(selectedRowKeys);
+  const [isFilterExpand, setIsFilterExpand] = useState<boolean>(false);
 
   const { data: products, isLoading } = productsApi.useGetProductsQuery({
     page: meta.page,
@@ -147,9 +147,9 @@ console.log(selectedRowKeys);
 
   return (
     <div>
-      Show all Gadgets Page
+      <h1 className="text-2xl font-semibold sm:font-bold text-blue-500" >Gadgets List</h1>
       <div>
-        <div className="flex items-center justify-end gap-4">
+        <div className="flex flex-wrap items-center justify-end gap-x-2 md:gap-x-4">
           <Button
             className={`flex items-center ${selectedRowKeys.length ? null : 'hidden'}`}
             type="primary"
@@ -169,8 +169,8 @@ console.log(selectedRowKeys);
           </Button>
           <Button
             type="dashed"
-            className="bg-red-300  block my-2 font-bold"
-            onClick={()=>{}}
+            className={`bg-red-300  block my-2 font-bold ${isFilterExpand?"bg-blue-300 ":"bg-blue-100 text-black-500"}`}
+            onClick={()=>setIsFilterExpand(!isFilterExpand)}
           >
             Advance Filter
           </Button>
@@ -186,7 +186,9 @@ console.log(selectedRowKeys);
           modalStatus={sellOrderModalStatus}
           onModalClose={onSaleOrderModalClose}
         />
-        <FilterItems onSearch={onSearch} />
+        <div className={`${isFilterExpand ? 'max-h-[1400px]': 'max-h-0'} transition-all duration-200 easy-in-out`}>
+          <FilterItems onSearch={onSearch} />
+        </div>
         <ProductsTable
           data={products?.data?.data || []}
           meta={products?.data?.meta}
