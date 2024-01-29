@@ -1,5 +1,5 @@
 import { Button } from 'antd';
-import React, { ReactNode } from 'react';
+import  { ReactNode } from 'react';
 
 type TElectroButtonProps = {
     children:ReactNode | string,

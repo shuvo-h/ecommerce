@@ -18,8 +18,8 @@ const Login = () => {
   // const {register,handleSubmit,} = useForm<TLoginInputs>()
 
   const defaultFormValue = {
-    email: "user@example.com",
-    password: "Aa@12",
+    email: "",
+    password: "",
   };
 
   const onSubmit = async (data: FieldValues) => {

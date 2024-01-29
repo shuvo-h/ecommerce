@@ -2,7 +2,8 @@ import { BaseQueryApi, BaseQueryFn, DefinitionType, FetchArgs, createApi, fetchB
 import { RootState } from "../store";
 import { logout, setUser } from "../features/auth/authSlice";
 
-const baseUrl = `http://localhost:5000/api/v1`;
+// const baseUrl = `http://localhost:5000/api/v1`;
+const baseUrl = `https://assignment-5-backend-express.vercel.app/api/v1`;
 
 const baseQuery = fetchBaseQuery({
     baseUrl,

@@ -8,7 +8,7 @@ Click here to read [Full API Documentation](https://documenter.getpostman.com/vi
 -->
 
 ## Live URL 
-Click here to visit the root of the server [Electric Gadgets Management](https://assignment-4-pink.vercel.app)
+Click here to visit [Electric Gadgets Management](https://glistening-hotteok-f0e6c3.netlify.app)
 
 ## Prerequisites
 
@@ -47,14 +47,14 @@ npm run start
 - CRUD Operations: Add, delete, update, and view electric gadgets in the inventory.
 - Filtering System: Robust filtering options to narrow down electric gadgets based on various criteria such as price range, release date, brand, model number, category, operating system, connectivity, power source, features, and more.
 
-# Sales Management
+## Sales Management
 - Sell Products: Users can search for products to sell, specify the quantity, buyer's name, and sale date.
 - Automatic Removal: Products are automatically removed from the inventory when the quantity reaches zero after a sale.
 
 ## Sales History
 - View sales history categorized by weekly, daily, monthly, and yearly periods.
 
-# User Interface Features
+## User Interface Features
 - Real-time UI Updates: Graceful UI updates in real-time for product changes, sales, etc.
 - Responsive Design: Optimized for mobile responsiveness to ensure usability on various devices.
 
@@ -62,6 +62,6 @@ npm run start
 - Redux: Utilized for efficient state management to maintain a consistent application state.
 - RTK Query: Used for efficient CRUD operations and re-fetching functionality to ensure data accuracy and consistency.
 
-# Additional Features
+## Additional Features
 - Bulk Delete: Enable users to efficiently manage inventory with a bulk delete feature for electric gadgets.
 - Duplicate & Edit: Implement a feature to duplicate existing products and modify them to create new variants.
