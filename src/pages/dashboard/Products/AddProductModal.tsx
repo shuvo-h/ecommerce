@@ -7,6 +7,7 @@ import { productsApi } from "../../../redux/features/products/productsApi";
 import { TProduct } from "../../../redux/features/products/productSlice";
 import { toast } from "sonner";
 import { errorFormatToObj, errorFormatToString } from "../../../utilies/errorFormatter";
+import ElectroFileInput from "../../../components/form/ElectroFileInput";
 
 type TAddProductModalProps = {
   defaultProduct?: TProduct
@@ -26,6 +27,11 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
   };
 
   const onAddProduct = async(data: FieldValues ) => {
+    console.log(data);
+    console.log("Upload image to imgBB and store url to DB, handle update part");
+    
+    return
+    
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {slug,...restData} = data;
     
@@ -217,10 +223,11 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
         style={{maxWidth:"700px"}}
       >
         <ElectroForm
-          className="grid md:grid-cols-2 gap-2 border p-4 rounded-lg shadow-md"
+          className="border p-4 rounded-lg shadow-md"
           onSubmit={onAddProduct}
           defaultValues={defaultProduct as FieldValues}
         >
+          <div className="grid md:grid-cols-2 gap-2">
             {
                 fields.map((field, idx) =>{
                     
@@ -235,7 +242,15 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
                   />
                 })
             }
-          <ElectroButton loading={isLoading || isEditLoading} disabled={isLoading || isEditLoading} type="submit">{isEditedProduct ? "Update" : "Create"} Product</ElectroButton>
+            <ElectroFileInput 
+              label="Image"
+              name="img"
+            />
+          </div>
+            <div >
+              <ElectroButton loading={isLoading || isEditLoading} disabled={isLoading || isEditLoading} type="submit">{isEditedProduct ? "Update" : "Create"} Product</ElectroButton>
+
+            </div>
           <span className="text-red-500">{errorFormatToObj(error || editError)[""] ? "Name already exist": null}</span>
         </ElectroForm>
       </Modal>
