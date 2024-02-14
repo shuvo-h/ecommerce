@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
 type TQuary = {
@@ -55,6 +55,18 @@ type TProductState = {
     products: TProduct[] | [];
     meta: TProductMeta;
     query: TQuary;
+    cart: TCart;
+}
+export type TCartProductList = {
+  product: string
+  quantity: number
+}
+
+export type TCart = {
+  productList: TCartProductList[]
+  buyerName: string
+  contactNumber: string
+  soldDate: string
 }
 
 const initialState: TProductState = {
@@ -77,6 +89,12 @@ const initialState: TProductState = {
       storageCapacity: undefined,
       screenSize: undefined,
       operatingSystem: undefined
+    },
+    cart:{
+      productList: [],
+      buyerName: "",
+      contactNumber: "",
+      soldDate: "",
     },
 }
 
@@ -104,15 +122,26 @@ const productSlice = createSlice({
         const {minPrice,maxPrice} = action.payload;
         state.query = {...state.query,minPrice,maxPrice};
       },
+      addToCart: (state,action:PayloadAction<{productId:string,quantity:number}>) =>{
+        const {productId,quantity} = action.payload;
+        state.cart.productList.push({product:productId,quantity})
+      },
+      removeFromCart: (state,action) =>{
+        const productId = action.payload;
+        state.cart.productList = state.cart.productList.filter(item => item.product !== productId);
+      },
+
+
     },
   });
   
-  export const { setProducts,setProductLimitPerPage, setProductPageNumber,setQuery,setPriceQuery } = productSlice.actions;
+  export const { setProducts,setProductLimitPerPage, setProductPageNumber,setQuery,setPriceQuery,addToCart,removeFromCart } = productSlice.actions;
   export default productSlice.reducer;
   
   export const productGetters = {
     selectProductList: (state: RootState) => state.products.products,
     selectProductMeta: (state: RootState) => state.products.meta,
     selectProductQuery: (state: RootState) => state.products.query,
+    selectCart: (state: RootState) => state.products.cart,
   };
   

@@ -1,13 +1,15 @@
 import { Space, Table, Tooltip } from "antd";
 import type { TableColumnsType } from "antd";
 import {
+  TCartProductList,
   TProduct,
   TProductMeta,
+  productGetters,
   setProductLimitPerPage,
   setProductPageNumber,
 } from "../../../redux/features/products/productSlice";
 import { parseDate } from "../../../utilies/dateTimeUtils";
-import { useAppDispatch } from "../../../redux/storeHook";
+import { useAppDispatch, useAppSelector } from "../../../redux/storeHook";
 import { productsApi } from "../../../redux/features/products/productsApi";
 import { toast } from "sonner";
 import { CopyOutlined, DeleteFilled, EditOutlined, ShoppingTwoTone } from "@ant-design/icons";
@@ -37,8 +39,11 @@ const ProductsTable = ({
   setSelectedRowKeys,
 }: TProductsTableProps) => {
   const dispatch = useAppDispatch();
-  
   const [deleteProductMutation] = productsApi.useDeleteProductByIdMutation();
+
+  const cart = useAppSelector(productGetters.selectCart)
+  console.log(cart.productList);
+  
 
   // methods
   const onDeleteClick = async (productId: string) => {
@@ -82,6 +87,11 @@ const ProductsTable = ({
     });
     return newList;
   };
+
+  const isProductExistInCart = (productList:TCartProductList[],productId:string) =>{
+    const existIndex = productList.findIndex(el=>el.product === productId);
+    return existIndex > -1;
+  }
 
   const columns: TableColumnsType<TProductCol> = [
     {
@@ -224,16 +234,18 @@ const ProductsTable = ({
       // fixed: "right",
       align:"center",
       render: (value) => {
+        const hasInCart = isProductExistInCart(cart.productList,value._id);
         return (
           <Space className="flex flex-col">
-            <Tooltip title="Sell Now">
+            <Tooltip title="Add to Cart">
               <button
-                className="border px-1 rounded-md hover:border-blue-400 hover:scale-125 transition easy-in-out"
+                className={`border px-1 rounded-md transition easy-in-out ${hasInCart ? 'hover:border-red-400':'hover:border-blue-400 hover:scale-125' }`}
+                disabled={hasInCart}
                 onClick={() => {
                   onClickSale(value._id);
                 }}
               >
-                <ShoppingTwoTone />
+                <ShoppingTwoTone twoToneColor={hasInCart ? "pink": ""} />
               </button>
 
             </Tooltip>

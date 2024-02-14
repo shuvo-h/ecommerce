@@ -13,12 +13,13 @@ import { FieldValues } from "react-hook-form";
 import AddProductModal from "./AddProductModal";
 import { useDispatch } from "react-redux";
 import CreateSaleModal from "./CreateSaleModal";
-import { useSearchParams } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import FilterItems from "./FilterItems";
 import { Button } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import { errorFormatToString } from "../../../utilies/errorFormatter";
+import AddToCart from "./AddToCart";
 
 const defaultProductFormModalValue = {
   _id: "",
@@ -182,9 +183,15 @@ const Gadgets = () => {
           isEditedProduct={isEditedProduct}
         />
 
-        <CreateSaleModal
+        {/* <CreateSaleModal
           modalStatus={sellOrderModalStatus}
           onModalClose={onSaleOrderModalClose}
+        /> */}
+        <NavLink to={'/checkout'} >Checkout</NavLink>
+        <AddToCart 
+          modalStatus={sellOrderModalStatus}
+          onModalClose={onSaleOrderModalClose}
+          products={products?.data?.data || []}
         />
         <div className={`${isFilterExpand ? 'max-h-[1400px]': 'max-h-0'} transition-all duration-200 easy-in-out overflow-hidden`}>
           <FilterItems onSearch={onSearch} />

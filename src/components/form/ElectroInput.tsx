@@ -13,6 +13,7 @@ type TElectroInputProps = {
   classNameLabel?: string;
   classNameField?: string;
   error?: string;
+  disabled?: boolean;
 };
 
 const ElectroInput = ({
@@ -27,6 +28,7 @@ const ElectroInput = ({
   value,
   defaultValue = undefined,
   placeHolder = undefined,
+  disabled = false,
 
 }: TElectroInputProps) => {
   return (
@@ -50,7 +52,7 @@ const ElectroInput = ({
               id={id}
               defaultValue={defaultValue}
               placeholder={placeHolder}
-              
+              disabled={disabled}
             />
           )}
         />
