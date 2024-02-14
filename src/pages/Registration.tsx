@@ -10,18 +10,26 @@ import { verifyToken } from '../utilies/verifyToken';
 import { TUser, setUser } from '../redux/features/auth/authSlice';
 import { useAppDispatch } from '../redux/storeHook';
 import { authApi } from '../redux/features/auth/authApi';
+import ElectroSelect from '../components/form/ElectroSelect';
+import { useState } from 'react';
+import { TUSER_ROLE, USER_ROLE } from '../redux/features/auth/authConstant';
 
 const Registration = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [registerMutation, {  isLoading,  }] =    authApi.useRegisterMutation();
-  const onSubmit = async (data: FieldValues) => {
+    const [selectedRole,setSelectedRole] = useState<TUSER_ROLE>(USER_ROLE.USER);
+
+    
+
+    const onSubmit = async (data: FieldValues) => {
     
     const toastId = toast.loading("loading to signup");
     try {
       const userInfo = {
         email: data.email,
         password: data.password,
+        role: selectedRole,
       };
       const response = await registerMutation(userInfo).unwrap(); // unwrap means only return the response data, not all a=object
       
@@ -63,6 +71,16 @@ const Registration = () => {
           id="password"
           // defaultValue='admin123'
           label="Password"
+        />
+        <ElectroSelect
+          options={[
+            {label: USER_ROLE.USER,value: USER_ROLE.USER},
+            {label: USER_ROLE.Manager,value: USER_ROLE.Manager},
+          ]}
+          label="Role"
+          onChange={(value:string)=>{setSelectedRole(value as TUSER_ROLE)}}
+          defaultValue={selectedRole}
+          className='w-full mb-5'
         />
 
         {/* <Button htmlType="submit">Login</Button> */}

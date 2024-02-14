@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { TUser_Role } from "./authConstant";
+import { TUSER_ROLE, TUser_STATUS } from "./authConstant";
 
 export type TUser = {
   _id: string;
   email: string;
-  role: TUser_Role;
-  status: string;
+  role:  TUSER_ROLE;
+  status: TUser_STATUS;
   iat: number;
   exp: number;
 };
