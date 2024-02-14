@@ -187,7 +187,7 @@ const Gadgets = () => {
           modalStatus={sellOrderModalStatus}
           onModalClose={onSaleOrderModalClose}
         /> */}
-        <NavLink to={'/checkout'} >Checkout</NavLink>
+        <NavLink to={'/dashboard/checkout'} >Checkout</NavLink>
         <AddToCart 
           modalStatus={sellOrderModalStatus}
           onModalClose={onSaleOrderModalClose}

@@ -16,7 +16,7 @@ const MainLayout = () => {
           <Sidebar />
       <Layout>
         <Header style={{ padding: 0,   }} />
-        <Content style={{ margin: '24px 16px 0' }}>
+        <Content>
           <div
             style={{
               padding: 24,

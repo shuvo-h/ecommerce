@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 
 export type TUserPaths = {
-  name: string;
+  name?: string;
   icon: ReactNode;
   path?: string;
   element?: ReactNode;

@@ -7,6 +7,7 @@ import { createElement } from "react";
 import About from "../pages/About";
 import Gadgets from "../pages/dashboard/Products/Gadgets";
 import SalesHistoryPage from "../pages/dashboard/SaleOrders/SalesHistoryPage";
+import Checkout from "../pages/dashboard/Checkout/Checkout";
 
 export const dashboardRoutes = [
   {
@@ -24,6 +25,12 @@ export const dashboardRoutes = [
         icon: createElement(GroupOutlined),
         path: "sales-history",
         element: <SalesHistoryPage />,
+      },
+      {
+        // name: "checkout",
+        icon: createElement(GroupOutlined),
+        path: "checkout",
+        element: <Checkout />,
       },
     ],
   },

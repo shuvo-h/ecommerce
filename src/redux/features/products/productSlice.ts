@@ -130,12 +130,32 @@ const productSlice = createSlice({
         const productId = action.payload;
         state.cart.productList = state.cart.productList.filter(item => item.product !== productId);
       },
-
+      clearCart: (state) =>{
+        state.cart = {
+          productList: [],
+          buyerName: "",
+          contactNumber: "",
+          soldDate: "",
+        }
+      },
+      updateQuantityInCart: (state,action:PayloadAction<{productId:string,quantity:number}>) =>{
+        const {productId,quantity} = action.payload;
+        const productIndex = state.cart.productList.findIndex(el=>el.product === productId);
+        if (productIndex > -1) {
+          const updatedList = [...state.cart.productList];
+          updatedList[productIndex] = {
+            ...updatedList[productIndex],
+            quantity,
+          };
+          state.cart.productList = updatedList;
+        }
+        // state.cart.productList = state.cart.productList.filter(item => item.product !== productId);
+      },
 
     },
   });
   
-  export const { setProducts,setProductLimitPerPage, setProductPageNumber,setQuery,setPriceQuery,addToCart,removeFromCart } = productSlice.actions;
+  export const { setProducts,setProductLimitPerPage, setProductPageNumber,setQuery,setPriceQuery,addToCart,removeFromCart,updateQuantityInCart,clearCart } = productSlice.actions;
   export default productSlice.reducer;
   
   export const productGetters = {

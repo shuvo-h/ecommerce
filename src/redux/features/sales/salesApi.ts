@@ -1,4 +1,5 @@
 import { baseAPI } from "../../api/baseAPI";
+import { TCart } from "../products/productSlice";
 import { TSale } from "./salesSlice";
 
 interface TSaleOrderCreateRes {
@@ -41,20 +42,14 @@ export const salesApi = baseAPI.injectEndpoints({
     // sell a product
     sellProductById: builder.mutation<
       TSaleOrderCreateRes,
-      TProductSellBodyInfo
+      TCart
     >({
       query: (sellInfo) => {
-        // Convert quantity to number
-        const bodyData = {
-          ...sellInfo,
-          quantity: Number(sellInfo.quantity),
-        };
-
-
+        
         return {
           url: `/sale-orders/order`,
           method: "POST",
-          body: bodyData,
+          body: sellInfo,
         };
       },
       invalidatesTags: ['products'],
