@@ -42,6 +42,7 @@ export interface TProduct  {
         depth: number;
     };
     weight: string;
+    img: string;
     createdAt: Date;
     updatedAt: Date;
 }

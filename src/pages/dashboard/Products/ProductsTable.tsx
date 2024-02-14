@@ -93,6 +93,16 @@ const ProductsTable = ({
       fixed: "left"
     },
     {
+      title: "Image",
+      dataIndex: "img",
+      key: "img",
+      render: (value)=><span>
+        {
+          value ? <img src={value} alt="" /> : "N/A"
+        }
+      </span>
+    },
+    {
       title: "Price",
       dataIndex: "price",
       key: "price",

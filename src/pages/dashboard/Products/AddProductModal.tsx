@@ -8,6 +8,7 @@ import { TProduct } from "../../../redux/features/products/productSlice";
 import { toast } from "sonner";
 import { errorFormatToObj, errorFormatToString } from "../../../utilies/errorFormatter";
 import ElectroFileInput from "../../../components/form/ElectroFileInput";
+import { useState } from "react";
 
 type TAddProductModalProps = {
   defaultProduct?: TProduct
@@ -19,24 +20,42 @@ type TAddProductModalProps = {
 const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProduct}:TAddProductModalProps) => {
   const [addProductMutation,{isLoading,error}] = productsApi.useAddProductMutation()
   const [editProductByIdMutation,{isLoading:isEditLoading,error:editError}] = productsApi.useEditProductByIdMutation()
-  
+  const [previewImage,setPreviewImage] = useState<string>('');
   
 
   const handleOk = () => {
     console.log("clicked ok");
   };
+  const onFileChange = (file:File|undefined) => {
+    if (file instanceof File) {
+      const imgUrl = URL.createObjectURL(file)
+      setPreviewImage(imgUrl)
+    }
+  };
 
   const onAddProduct = async(data: FieldValues ) => {
-    console.log(data);
-    console.log("Upload image to imgBB and store url to DB, handle update part");
-    
-    return
-    
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {slug,...restData} = data;
-    
-    const toastId = toast.loading('creating new product');
+    const toastId = toast.loading(isEditedProduct ? "Updating product....." :'creating new product');
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {slug,...restData} = data;
+      
+      if (data.img && data.img instanceof File) {
+        const imgBBApi = import.meta.env.VITE_IMGBB_API_KEY;
+        
+        const formData = new FormData();
+        formData.append('key',imgBBApi);
+        formData.append('image',data.img);
+        formData.append('name', data.name)
+        console.log(Object.fromEntries(formData));
+        const uploadRes = await fetch('https://api.imgbb.com/1/upload', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        if (uploadRes.success) {
+          restData.img = uploadRes.data?.url;
+        }
+      }
       const dimension = {
         height: Number(data.dimension.height),
         width: Number(data.dimension.width),
@@ -54,6 +73,7 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
         // call edit API
         const result = await editProductByIdMutation({productId: data._id, product:formattedData})
         if ('data' in result) {
+          setPreviewImage('')
           toast.success("Product Edited successfully",{id:toastId,duration:2000})
           onCloseModal();
         }else{
@@ -64,6 +84,7 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
         // call create API
         const result = await addProductMutation(formattedData as TProduct)
         if ('data' in result) {
+          setPreviewImage('')
           toast.success("Product created successfully",{id:toastId,duration:2000})
           onCloseModal();
         }else{
@@ -198,7 +219,7 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
     },
   ]
 
-
+ 
   return (
     <>
       {/* <Button
@@ -242,10 +263,15 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
                   />
                 })
             }
-            <ElectroFileInput 
-              label="Image"
-              name="img"
-            />
+
+            <div>
+              <img className={`h-[${previewImage||defaultProduct?.img ? 150:0}px]`} src={previewImage||defaultProduct?.img} alt="" />
+              <ElectroFileInput 
+                label="Image"
+                name="img"
+                onFileChange={onFileChange}
+              />
+            </div>
           </div>
             <div >
               <ElectroButton loading={isLoading || isEditLoading} disabled={isLoading || isEditLoading} type="submit">{isEditedProduct ? "Update" : "Create"} Product</ElectroButton>
