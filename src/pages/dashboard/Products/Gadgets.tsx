@@ -12,11 +12,10 @@ import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import AddProductModal from "./AddProductModal";
 import { useDispatch } from "react-redux";
-import CreateSaleModal from "./CreateSaleModal";
 import { NavLink, useSearchParams } from "react-router-dom";
 import FilterItems from "./FilterItems";
 import { Button } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import { errorFormatToString } from "../../../utilies/errorFormatter";
 import AddToCart from "./AddToCart";
@@ -71,6 +70,7 @@ const Gadgets = () => {
   const [deleteSelectedProductsMutation,{isLoading:isBulkDeleteLoading,}] = productsApi.useDeleteProductsByIdsMutation()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isFilterExpand, setIsFilterExpand] = useState<boolean>(false);
+  const cart = useAppSelector(productGetters.selectCart);
 
   const { data: products, isLoading } = productsApi.useGetProductsQuery({
     page: meta.page,
@@ -162,6 +162,12 @@ const Gadgets = () => {
             <DeleteOutlined /> Bulk Delete
           </Button>
           <Button
+          type="dashed"
+          className={`bg-blue-300 ml-auto block my-2 font-bold ${cart.productList.length ? null : 'hidden'}`}
+        >
+          <NavLink to={'/dashboard/checkout'} > <ShoppingCartOutlined /> Checkout</NavLink>
+        </Button>
+          <Button
             type="dashed"
             className="bg-blue-300  block my-2 font-bold"
             onClick={onOpenModal}
@@ -187,7 +193,8 @@ const Gadgets = () => {
           modalStatus={sellOrderModalStatus}
           onModalClose={onSaleOrderModalClose}
         /> */}
-        <NavLink to={'/dashboard/checkout'} >Checkout</NavLink>
+        
+        
         <AddToCart 
           modalStatus={sellOrderModalStatus}
           onModalClose={onSaleOrderModalClose}

@@ -219,6 +219,7 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
     },
   ]
 
+ console.log(defaultProduct);
  
   return (
     <>
@@ -246,7 +247,7 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
         <ElectroForm
           className="border p-4 rounded-lg shadow-md"
           onSubmit={onAddProduct}
-          defaultValues={defaultProduct as FieldValues}
+          defaultValues={{...defaultProduct,releaseDate: new Date(defaultProduct?.releaseDate || new Date()).toISOString().split("T")[0]} as FieldValues}
         >
           <div className="grid md:grid-cols-2 gap-2">
             {
