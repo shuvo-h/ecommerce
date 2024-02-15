@@ -35,9 +35,7 @@ const Checkout = () => {
 
   const cart = useAppSelector(productGetters.selectCart);
   const searchQuery = {
-    productIds: cart.productList
-      .map((cartProduct) => cartProduct.product)
-      .join(","),
+    productIds: cart.productList?.map((cartProduct) => cartProduct.product)?.join(","),
   };
   const { data: products } = productsApi.useGetProductsQuery(searchQuery, {
     skip: searchQuery.productIds.length < 1,
