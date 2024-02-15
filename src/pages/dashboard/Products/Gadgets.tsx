@@ -165,7 +165,7 @@ const Gadgets = () => {
           type="dashed"
           className={`bg-blue-300 ml-auto block my-2 font-bold ${cart.productList.length ? null : 'hidden'}`}
         >
-          <NavLink to={'/dashboard/checkout'} > <ShoppingCartOutlined /> Checkout</NavLink>
+          <NavLink to={'/dashboard/checkout'} > <ShoppingCartOutlined /> Checkout ({cart.productList.length})</NavLink>
         </Button>
           <Button
             type="dashed"
