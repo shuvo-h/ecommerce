@@ -4,17 +4,29 @@ import { sidebarItemsGenerator } from "../../utilies/sidebarItemsGenerator";
 import { dashboardRoutes } from "../../routes/dashboard.routes";
 import { createElement } from "react";
 import { LogoutOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "../../redux/storeHook";
-import { logout } from "../../redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/storeHook";
+import { authGetters, logout } from "../../redux/features/auth/authSlice";
+import { USER_ROLE } from "../../redux/features/auth/authConstant";
 const { Sider } = Layout;
 
 const Sidebar = () => {
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(authGetters.selectCurrentUser);
   const dashboardLayoutPath = "dashboard";
   const sidebarItems: TSidebarItem[] = sidebarItemsGenerator(
     dashboardRoutes,
     dashboardLayoutPath
-  );
+  ).filter(el=>{
+    if (el.key === 'Add Account') {
+      if (currentUser?.role === USER_ROLE.USER) {
+        return false
+      }
+    }
+    return true
+  });
+
+  console.log(sidebarItems);
+  
   
   const LogoutLabel = () => {
     return <button onClick={() => dispatch(logout())}>Logout</button>;
