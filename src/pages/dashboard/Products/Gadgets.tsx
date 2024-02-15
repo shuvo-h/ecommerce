@@ -42,6 +42,7 @@ const defaultProductFormModalValue = {
     depth: "",
   },
   weight: "",
+  img:  '',
 };
 
 const purifyObject = (object:Record<string,unknown>) =>{

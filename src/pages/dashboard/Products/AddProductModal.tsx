@@ -8,7 +8,7 @@ import { TProduct } from "../../../redux/features/products/productSlice";
 import { toast } from "sonner";
 import { errorFormatToObj, errorFormatToString } from "../../../utilies/errorFormatter";
 import ElectroFileInput from "../../../components/form/ElectroFileInput";
-import { useState } from "react";
+import { useRef } from "react";
 
 type TAddProductModalProps = {
   defaultProduct?: TProduct
@@ -20,7 +20,7 @@ type TAddProductModalProps = {
 const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProduct}:TAddProductModalProps) => {
   const [addProductMutation,{isLoading,error}] = productsApi.useAddProductMutation()
   const [editProductByIdMutation,{isLoading:isEditLoading,error:editError}] = productsApi.useEditProductByIdMutation()
-  const [previewImage,setPreviewImage] = useState<string>('');
+  const previewImageRef = useRef<HTMLImageElement | null>(null);
   
 
   const handleOk = () => {
@@ -29,7 +29,10 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
   const onFileChange = (file:File|undefined) => {
     if (file instanceof File) {
       const imgUrl = URL.createObjectURL(file)
-      setPreviewImage(imgUrl)
+      if (previewImageRef.current) {
+        previewImageRef.current.src = imgUrl;
+      }
+      
     }
   };
 
@@ -73,7 +76,9 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
         // call edit API
         const result = await editProductByIdMutation({productId: data._id, product:formattedData})
         if ('data' in result) {
-          setPreviewImage('')
+          if (previewImageRef.current) {
+            previewImageRef.current.src = '';
+          }
           toast.success("Product Edited successfully",{id:toastId,duration:2000})
           onCloseModal();
         }else{
@@ -84,7 +89,9 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
         // call create API
         const result = await addProductMutation(formattedData as TProduct)
         if ('data' in result) {
-          setPreviewImage('')
+          if (previewImageRef.current) {
+            previewImageRef.current.src = '';
+          }
           toast.success("Product created successfully",{id:toastId,duration:2000})
           onCloseModal();
         }else{
@@ -219,7 +226,7 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
     },
   ]
 
- console.log(defaultProduct);
+ console.log(defaultProduct,previewImageRef.current);
  
   return (
     <>
@@ -266,7 +273,8 @@ const AddProductModal = ({defaultProduct, openModal, onCloseModal, isEditedProdu
             }
 
             <div>
-              <img className={`h-[${previewImage||defaultProduct?.img ? 150:0}px]`} src={previewImage||defaultProduct?.img} alt="" />
+              {/* <img ref={imgRef}  className={`h-[${previewImageRef.current||defaultProduct?.img ? 150:0}px]`} src={previewImageRef.current||defaultProduct?.img} alt="" /> */}
+              <img ref={previewImageRef}  className={`h-[${defaultProduct?.img ? 150:0}px]`} src={defaultProduct?.img} alt="" />
               <ElectroFileInput 
                 label="Image"
                 name="img"
