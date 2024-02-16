@@ -1,4 +1,4 @@
-# Electric Gadgets Management Dashboard(Assignment 5)
+# Electric Gadgets Management Dashboard(Assignment 6)
 
 Welcome to the Electric Gadgets Management Dashboard frontend repository! This project is designed to provide a comprehensive solution for managing electric gadgets inventory, tracking sales, and analyzing sales history. This README.md file will guide you through setting up the frontend application and provide an overview of its features and functionalities.
 
@@ -20,8 +20,8 @@ Make sure you have the following installed on your machine:
 ## Installation
 
 ```bash
-git clone https://github.com/Porgramming-Hero-web-course/l2b2-full-stack-a5-client-side-shuvo-h.git
-cd l2b2-full-stack-a5-client-side-shuvo-h
+git clone https://github.com/Porgramming-Hero-web-course/l2-b2-assignment-6-fronten-shuvo-h.git
+cd l2-b2-assignment-6-fronten-shuvo-h
 npm install
 ```
 ## App Configuration(.env)
@@ -29,8 +29,11 @@ Add your environment variable values like database url, saltround for bycript, p
 
 
 Environment Variables:
-- [NODE_ENV](): development (development || production)
-- [PORT](): 5000
+- [NODE_ENV](): ```development (development || production)```
+- [PORT](): ```5000```
+- [VITE_DEV_BASE_URL](): ```http://localhost:5000```
+- [VITE_PROD_BASE_URL](): ```https://el-gadget-mgt.vercel.app```
+- [VITE_IMGBB_API_KEY](): ```your-imgbb-api-key```
 
 
 ## Run the Server
@@ -40,8 +43,11 @@ npm run build
 npm run start
 ```
 ## Features
-- Users can register and log in securely using JWT (JSON Web Tokens).
+- Users can register as manager and log in securely using JWT (JSON Web Tokens).
 - Authentication ensures that only authorized users can access the dashboard.
+- A manager can create a new seller user or a manager
+- Manager has all the access to CRUD any product and can see the sales history of any users
+- The role with user can only CRUD on the products they own. and also sales history is restricted to only for the sales they made.
 
 ## Electric Gadgets Management
 - CRUD Operations: Add, delete, update, and view electric gadgets in the inventory.
@@ -52,7 +58,7 @@ npm run start
 - Automatic Removal: Products are automatically removed from the inventory when the quantity reaches zero after a sale.
 
 ## Sales History
-- View sales history categorized by weekly, daily, monthly, and yearly periods.
+- Sales history in both graphical and table view with broad facility to check based on daily, weekly, monthly and yearly within a date range
 
 ## User Interface Features
 - Real-time UI Updates: Graceful UI updates in real-time for product changes, sales, etc.
