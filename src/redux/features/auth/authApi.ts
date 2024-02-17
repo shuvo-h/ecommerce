@@ -10,6 +10,7 @@ export const authApi = baseAPI.injectEndpoints({
                     body: userInfo,
                 }
             },
+            invalidatesTags:['products','products-options','sale_orders']
         }),
         register: builder.mutation({
             query: (userInfo) =>{
