@@ -1,4 +1,4 @@
-# Electric Gadgets Management Dashboard(Assignment 6)
+# Electric Gadgets Management Dashboard
 
 Welcome to the Electric Gadgets Management Dashboard frontend repository! This project is designed to provide a comprehensive solution for managing electric gadgets inventory, tracking sales, and analyzing sales history. This README.md file will guide you through setting up the frontend application and provide an overview of its features and functionalities.
 
